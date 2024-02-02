@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-		<PackageId>Korovaik.Core</PackageId>
+		<PackageId>Korovaik.Core.UI</PackageId>
   </PropertyGroup>
 	
 	<ItemGroup>
