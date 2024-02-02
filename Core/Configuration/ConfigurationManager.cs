@@ -3,19 +3,18 @@ using Microsoft.Extensions.Configuration;
 
 namespace Core.Configuration
 {
-    public static class ConfigurationManager<T> where T : class
+    public static class ConfigurationManager
     {
         private static readonly string _pathToSettings = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
         private static readonly string _configurationFileName = "settings.json";
         private static readonly string _localSettingsFileName = _configurationFileName.Replace(".json", ".local.json");
         private static readonly List<string> _jsonsToAdd = new() { _configurationFileName };
 
-
         private static readonly object _lockObj = new();
 
-        public static T CurrentConfigurations { get; private set; } = null!;
+        public static Configurations CurrentConfigurations { get; private set; } = null!;
 
-        public static void LoadSettings()
+        public static void LoadSettingsForEnv<T>() where T : Configurations
         {
             if (CurrentConfigurations == null)
             {
@@ -26,6 +25,11 @@ namespace Core.Configuration
                     CurrentConfigurations = GetConfiguration().Get<T>();
                 }
             }
+        }
+
+        public static void AddJsonAsSource(string jsonFileName)
+        {
+            _jsonsToAdd.Add(jsonFileName);
         }
 
         private static void AddEnvironmentConfigs(string envName)
@@ -52,11 +56,6 @@ namespace Core.Configuration
             .AddJsonFile(_localSettingsFileName, optional: true);
 
             return builder.Build();
-        }
-
-        public static void AddJsonAsSource(string jsonFileName)
-        {
-            _jsonsToAdd.Add(jsonFileName);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace Core.Browser.Settings
+namespace Core.UI.Browser.Settings
 {
     public abstract class DriverConfigurator
     {

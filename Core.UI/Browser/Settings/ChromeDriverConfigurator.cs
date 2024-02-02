@@ -1,8 +1,9 @@
 ﻿using Core.Configuration.Models;
+using Core.UI.Browser.Configurations;
 using Core.Utils;
 using OpenQA.Selenium.Chrome;
 
-namespace Core.Browser.Settings
+namespace Core.UI.Browser.Settings
 {
     public class ChromeDriverConfigurator : DriverConfigurator
     {
@@ -49,7 +50,7 @@ namespace Core.Browser.Settings
             return driverOptions;
         }
 
-        
+
 
     }
 }

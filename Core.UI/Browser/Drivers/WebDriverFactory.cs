@@ -1,8 +1,8 @@
-﻿using Core.Browser.Settings;
-using Core.Configuration.Models;
+﻿using Core.UI.Browser.Configurations;
+using Core.UI.Browser.Settings;
 using OpenQA.Selenium;
 
-namespace Core.Browser.Drivers
+namespace Core.UI.Browser.Drivers
 {
     public class WebDriverFactory : IWebDriverFactory
     {

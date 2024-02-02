@@ -1,7 +1,7 @@
-﻿using Core.Configuration.Models;
+﻿using Core.UI.Browser.Configurations;
 using OpenQA.Selenium;
 
-namespace Core.Browser.Drivers
+namespace Core.UI.Browser.Drivers
 {
     public interface IWebDriverFactory
     {

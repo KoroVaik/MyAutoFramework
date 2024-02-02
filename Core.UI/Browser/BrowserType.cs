@@ -1,4 +1,4 @@
-﻿namespace Core.Browser
+﻿namespace Core.UI.Browser
 {
     public enum BrowserType
     {

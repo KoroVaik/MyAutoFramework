@@ -1,6 +1,6 @@
-﻿using Core.Browser;
+﻿using Core.UI.Browser;
 
-namespace Core.Configuration.Models
+namespace Core.UI.Browser.Configurations
 {
     public class WebDriverOptions
     {
@@ -14,9 +14,9 @@ namespace Core.Configuration.Models
 
         public BrowserType Browser { get; set; }
 
-        public List<string> Arguments { get; set;}
+        public List<string> Arguments { get; set; }
 
         //Key=Value
-        public List<string> ProfilePreferences { get; set;}
+        public List<string> ProfilePreferences { get; set; }
     }
 }
