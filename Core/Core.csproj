@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-		<PackageId>Core</PackageId>
+		<PackageId>Korovaik</PackageId>
 		<Version>1.0.0</Version>
 		<Authors>Rostyslav Porokhnia</Authors>
 		<Description>The base core framework for automation testing</Description>
