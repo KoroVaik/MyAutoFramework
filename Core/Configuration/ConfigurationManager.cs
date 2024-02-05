@@ -3,18 +3,25 @@ using Microsoft.Extensions.Configuration;
 
 namespace Core.Configuration
 {
-    public static class ConfigurationManager
+    public abstract class ConfigurationManager<T> where T : class
     {
-        private static readonly string _pathToSettings = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
-        private static readonly string _configurationFileName = "settings.json";
-        private static readonly string _localSettingsFileName = _configurationFileName.Replace(".json", ".local.json");
-        private static readonly List<string> _jsonsToAdd = new() { _configurationFileName };
+        private const string SettingsFileName = "settings.json";
+        private static readonly string _localSettingsFileName = SettingsFileName.Replace(".json", ".local.json");
+        private readonly string _pathToSettingsFolder;
+        private readonly List<string> _settingJsonsToAdd;
+
+        public ConfigurationManager(string pathToSettingsFolder = null, List<string> additionalSettingFiles = null)
+        {
+            _pathToSettingsFolder = pathToSettingsFolder ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
+            _settingJsonsToAdd = new() { SettingsFileName };
+            additionalSettingFiles.ForEach(AddJsonAsSource);
+        }
 
         private static readonly object _lockObj = new();
 
-        public static Configurations CurrentConfigurations { get; private set; } = null!;
+        public abstract T CurrentConfigurations { get; protected set; }
 
-        public static void LoadSettingsForEnv<T>() where T : Configurations
+        public void LoadEnvSettings()
         {
             if (CurrentConfigurations == null)
             {
@@ -22,35 +29,35 @@ namespace Core.Configuration
                 {
                     var envName = GetEnvName();
                     AddEnvironmentConfigs(envName);
-                    CurrentConfigurations = GetConfiguration().Get<T>();
+                    CurrentConfigurations = GetConfiguration().Get<Configurations<T>>().EnironmentConfigurations;
                 }
             }
         }
 
-        public static void AddJsonAsSource(string jsonFileName)
+        protected void AddJsonAsSource(string jsonFileName)
         {
-            _jsonsToAdd.Add(jsonFileName);
+            _settingJsonsToAdd.Add(jsonFileName);
         }
 
-        private static void AddEnvironmentConfigs(string envName)
+        private void AddEnvironmentConfigs(string envName)
         {
-            var envConfigJson = _configurationFileName.Replace(".json", envName);
+            var envConfigJson = SettingsFileName.Replace(".json", envName);
             AddJsonAsSource(envConfigJson);
         }
 
-        private static string GetEnvName()
+        private string GetEnvName()
         {
                 var builder = GetConfiguration();
                 var currentEnv = builder.Get<Configurations>().Environment;
                 return currentEnv;
         }
 
-        private static IConfiguration GetConfiguration()
+        protected IConfiguration GetConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(_pathToSettings);
+                .SetBasePath(_pathToSettingsFolder);
 
-            _jsonsToAdd.ForEach(path => builder.AddJsonFile(path));
+            _settingJsonsToAdd.ForEach(path => builder.AddJsonFile(path));
 
             builder.AddEnvironmentVariables()
             .AddJsonFile(_localSettingsFileName, optional: true);
