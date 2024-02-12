@@ -33,16 +33,16 @@ namespace Core.UI.Browser.Settings
             {
                 _arguments.Add("--start-maximized");
             }
-            if (options.Arguments.Any()) _arguments = _arguments.Union(options.Arguments).ToList();
+            if (options.Arguments!.Any()) _arguments = _arguments.Union(options.Arguments!).ToList();
             driverOptions.AddArguments(_arguments);
 
             driverOptions.AddUserProfilePreference("download.default_directory", FileSystemUtils.DOWNLOADS_FOLDER_PATH);
             driverOptions.AddUserProfilePreference("download.prompt_for_download", false);
             driverOptions.AddUserProfilePreference("credentials_enable_service", false);
             driverOptions.AddUserProfilePreference("profile.password_manager_enabled", false);
-            if (options.ProfilePreferences.Any())
+            if (options.ProfilePreferences!.Any())
             {
-                foreach (var preference in options.ProfilePreferences.Select(p => p.Split("=")))
+                foreach (var preference in options.ProfilePreferences!.Select(p => p.Split("=")))
                 {
                     driverOptions.AddUserProfilePreference(preference[0], preference[1]);
                 }

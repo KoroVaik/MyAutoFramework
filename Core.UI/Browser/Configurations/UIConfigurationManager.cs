@@ -4,6 +4,6 @@ namespace Core.UI.Browser.Configurations
 {
     public class UIConfigurationManager : ConfigurationManager<UIConfigurations>
     {
-        public override UIConfigurations CurrentConfigurations { get; protected set; }
+        public override UIConfigurations? CurrentConfigurations { get; protected set; }
     }
 }

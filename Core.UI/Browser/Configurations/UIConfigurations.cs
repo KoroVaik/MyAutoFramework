@@ -2,6 +2,6 @@
 {
     public class UIConfigurations
     {
-        public WebDriverOptions WebDriverOptions { get; init; }
+        public WebDriverOptions? WebDriverOptions { get; init; }
     }
 }

@@ -21,7 +21,7 @@ namespace Core.UI.Browser.Settings
                 binaryPath = new DriverManager().SetUpDriver(driverConfig);
             }
 
-            return Path.GetDirectoryName(binaryPath);
+            return Path.GetDirectoryName(binaryPath)!;
         }
     }
 }

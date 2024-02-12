@@ -14,9 +14,9 @@ namespace Core.UI.Browser.Configurations
 
         public BrowserType Browser { get; set; }
 
-        public List<string> Arguments { get; set; }
+        public List<string>? Arguments { get; set; }
 
         //Key=Value
-        public List<string> ProfilePreferences { get; set; }
+        public List<string>? ProfilePreferences { get; set; }
     }
 }

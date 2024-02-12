@@ -5,21 +5,22 @@ using System.Drawing;
 
 namespace Core.UI.Browser.Pages.Components.Elements
 {
-    public class Element : IElement, IElementInternal, IHasSearchPath
+    public abstract class Element : IHasSearchPath
     {
         private static readonly ILogger _logger = Log.ForContext<Element>();
+        private const string ElementNotInitialized = "Element is not initialized";
 
-        private IBrowser _browser;
-        private IWebElement _webElement;
-        private By[] _searchPathFragments;
+        private IBrowser? _browser;
+        private IWebElement? _webElement;
+        private By[]? _searchPathFragments;
 
-        protected IBrowser Browser => _browser;
+        protected IBrowser Browser => _browser ?? throw new Exception(ElementNotInitialized);
 
-        protected IWebElement WebElement => _webElement;
+        public IWebElement WebElement => _webElement ?? throw new Exception(ElementNotInitialized);
 
-        protected By[] SearchPathFragments => _searchPathFragments;
+        protected By[] SearchPathFragments => _searchPathFragments ?? throw new Exception(ElementNotInitialized);
 
-        public string SearchPath => XPathHelper.ConvertByFragmentsToString(_searchPathFragments);
+        public virtual string SearchPath => XPathHelper.ConvertByFragmentsToString(SearchPathFragments);
 
         public string TagName => WebElement.TagName;
 
@@ -59,7 +60,7 @@ namespace Core.UI.Browser.Pages.Components.Elements
 
         public Size Size => WebElement.Size;
 
-        public void Initialize(IBrowser browser, IWebElement webElement, IEnumerable<By> searchPathFragments)
+        public void Initialize(IBrowser browser, IWebElement? webElement, IEnumerable<By> searchPathFragments)
         {
             _browser = browser;
             _webElement = webElement;
@@ -68,7 +69,7 @@ namespace Core.UI.Browser.Pages.Components.Elements
 
         public virtual void ClearWithKeyboardActions()
         {
-            var actions = _browser.BrowserActions;
+            var actions = Browser.BrowserActions;
             actions.MoveToElement(WebElement).Click().KeyDown(Keys.Control).SendKeys("a").KeyUp(Keys.Control).Release().Perform();
 
             actions.SendKeys(Keys.Backspace).Perform();
@@ -88,7 +89,7 @@ namespace Core.UI.Browser.Pages.Components.Elements
             }
         }
 
-        public void ClickJs() => _browser.ExecuteScript("arguments[0].click();", WebElement);
+        public void ClickJs() => Browser.ExecuteScript("arguments[0].click();", WebElement);
         
         public string GetAttribute(string attributeName) => WebElement.GetAttribute(attributeName);
 
@@ -106,11 +107,11 @@ namespace Core.UI.Browser.Pages.Components.Elements
 
         public bool HasClass(string className) => GetClasses().Contains(className);
 
-        public void HoverMouse() => _browser.BrowserActions.MoveToElement(WebElement);
+        public void HoverMouse() => Browser.BrowserActions.MoveToElement(WebElement);
 
         public void ScrollIntoView()
         {
-            _browser.ExecuteScript("arguments[0].scrollIntoViewIfNeeded(true);", WebElement);
+            Browser.ExecuteScript("arguments[0].scrollIntoViewIfNeeded(true);", WebElement);
         }
 
         public void SendKeys(string text, bool clearBeforeSend = true)
@@ -122,7 +123,7 @@ namespace Core.UI.Browser.Pages.Components.Elements
 
         public void SetAttribute(string attributeName, string value)
         {
-            _browser.ExecuteScript($"arguments[0].setAttribute('{attributeName}', '{value}');");
+            Browser.ExecuteScript($"arguments[0].setAttribute('{attributeName}', '{value}');");
         }
 
         public void Submit()
@@ -132,7 +133,7 @@ namespace Core.UI.Browser.Pages.Components.Elements
 
         protected virtual void WaitForInteractable()
         {
-            _browser.WaitFor(() => IsInteractable, 
+            Browser.WaitFor(() => IsInteractable, 
                 exceptionText: $"Element is not interactable: {SearchPath}");
         }
     }

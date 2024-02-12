@@ -10,7 +10,8 @@ namespace Core.UI.Browser.Drivers
         {
             var driverConfigurator = browserType switch
             {
-                BrowserType.Chrome => new ChromeDriverConfigurator(webDriverOptions)
+                BrowserType.Chrome => new ChromeDriverConfigurator(webDriverOptions),
+                _ => throw new NoSuchDriverException($"{browserType} browser is not supported")
             };
             return driverConfigurator.GetDriver();
         }

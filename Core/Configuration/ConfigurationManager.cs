@@ -10,16 +10,16 @@ namespace Core.Configuration
         private readonly string _pathToSettingsFolder;
         private readonly List<string> _settingJsonsToAdd;
 
-        public ConfigurationManager(string pathToSettingsFolder = null, List<string> additionalSettingFiles = null)
+        public ConfigurationManager(string? pathToSettingsFolder = null, List<string>? additionalSettingFiles = null)
         {
             _pathToSettingsFolder = pathToSettingsFolder ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
             _settingJsonsToAdd = new() { SettingsFileName };
-            additionalSettingFiles.ForEach(AddJsonAsSource);
+            additionalSettingFiles?.ForEach(AddJsonAsSource);
         }
 
         private static readonly object _lockObj = new();
 
-        public abstract T CurrentConfigurations { get; protected set; }
+        public abstract T? CurrentConfigurations { get; protected set; }
 
         public void LoadEnvSettings()
         {
@@ -29,7 +29,7 @@ namespace Core.Configuration
                 {
                     var envName = GetEnvName();
                     AddEnvironmentConfigs(envName);
-                    CurrentConfigurations = GetConfiguration().Get<Configurations<T>>().EnironmentConfigurations;
+                    CurrentConfigurations = GetConfiguration().Get<Configurations<T>>().EnironmentConfigurations!;
                 }
             }
         }
@@ -49,7 +49,7 @@ namespace Core.Configuration
         {
                 var builder = GetConfiguration();
                 var currentEnv = builder.Get<Configurations>().Environment;
-                return currentEnv;
+                return currentEnv!;
         }
 
         protected IConfiguration GetConfiguration()

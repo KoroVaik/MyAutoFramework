@@ -26,24 +26,24 @@ namespace Core.UI.Browser.Pages.Components
             _searchContextPathFragments = searchContextPathFragments;
         }
 
-        public TComponent SearchComponent<TComponent>(By by, int waitTimeout = 4000) where TComponent : class, IElement
+        public TComponent SearchComponent<TComponent>(By by, int waitTimeout = 4000) where TComponent : Element
         {
             try
             {
-                IWebElement webElement = null;
+                IWebElement? webElement = null;
                 _browser.WaitForAction(() => webElement = _searchContext.FindElement(by), waitTimeout);
-                return InitComponent<TComponent>(by, webElement);
+                return InitComponent<TComponent>(by, webElement!);
             }
-            catch (WebDriverTimeoutException ex)
+            catch (WebDriverTimeoutException)
             {
                 TComponent component = InitComponent<TComponent>(by, null);
                 var searchPath = component is IHasSearchPath path ? path.SearchPath : by.ToString();
-                _logger.Warning("Element was not found by path: \n" + searchPath);
+                _logger.Warning($"Element was not found (after {waitTimeout}ms) by path: \n" + searchPath);
                 return component;
             }
         }
 
-        public IEnumerable<TComponent> SearchComponents<TComponent>(By by, int waitTimeout = 4000) where TComponent : class, IElement
+        public IEnumerable<TComponent> SearchComponents<TComponent>(By by, int waitTimeout = 4000) where TComponent : Element
         {
                 IEnumerable<IWebElement> webElements = new List<IWebElement>();
                 _browser.WaitForOrContinue(() =>
@@ -55,10 +55,10 @@ namespace Core.UI.Browser.Pages.Components
                 return webElements.Select(elem => InitComponent<TComponent>(by, elem));
         }
 
-        private TComponent InitComponent<TComponent>(By by, IWebElement webElement) where TComponent : class, IElement
+        private TComponent InitComponent<TComponent>(By by, IWebElement? webElement) where TComponent : Element
         {
             TComponent element = Activator.CreateInstance<TComponent>();
-            ((IElementInternal)element).Initialize(_browser, webElement, GetSearchContextPathFragmentsFor(by));
+            element.Initialize(_browser, webElement, GetSearchContextPathFragmentsFor(by));
             return element;
         }
 

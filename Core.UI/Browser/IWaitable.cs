@@ -6,6 +6,6 @@
 
         bool WaitForOrContinue(Func<bool> func, int timeout = 4000, int tickSize = 200);
 
-        bool WaitForAction(Action action, int timeout = 4000, int tickSize = 200, string? exceptionText = null);
+        void WaitForAction(Action action, int timeout = 4000, int tickSize = 200, string? exceptionText = null);
     }
 }

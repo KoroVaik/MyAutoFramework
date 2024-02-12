@@ -9,37 +9,37 @@ namespace Core.UI.Browser
 {
     public interface IBrowser : IWaitable, IDisposable
     {
-        IPage CurrentPage { get; }
+        BasePage CurrentPage { get; }
 
         Actions BrowserActions { get; }
 
         IDevTools DevTools { get; }
 
-        string PageUrl { get; }
+        string CurrentUrl { get; }
+
+        Uri CurrentUri { get; }
 
         string Title { get; }
 
-        string PathAndQuery { get; }
+        TPage OpenPage<TPage>() where TPage : BasePage;
 
-        IPage OpenPage(Type pageType);
+        TPage OpenPage<TPage>(params string[] pageUrlParams) where TPage : BasePage;
 
-        TPage OpenPage<TPage>() where TPage : class, IPage;
-
-        TPage OpenPage<TPage>(string url, params string[] pageUrlParams) where TPage : class, IPage;
+        TPage GetPage<TPage>() where TPage : BasePage;
 
         void NavigateTo(string url);
 
         void NavigateBack();
 
-        void ScrollToBottom();
-
         Dictionary<string, string> GetCookies();
 
-        void SwitchToFrame(IElement frame);
+        void SwitchToFrame(Element frame);
 
         void SwitchToFrame(string frame);
 
-        ReadOnlyCollection<string> WaindowHandles { get; }
+        void SwitchToDefaultContent();
+
+        ReadOnlyCollection<string> WindowHandles { get; }
 
         string CurrentWindowHandle { get; }
 
