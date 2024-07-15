@@ -191,7 +191,7 @@ namespace Core.UI.Browser
         {
             try
             {
-                var wait = new WebDriverWait(WebDriver, TimeSpan.FromMicroseconds(timeout))
+                var wait = new WebDriverWait(WebDriver, TimeSpan.FromMilliseconds(timeout))
                 {
                     PollingInterval = TimeSpan.FromMilliseconds(tickSize),
                 };

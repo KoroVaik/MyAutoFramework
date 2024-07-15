@@ -5,51 +5,55 @@ namespace Core.Configuration
 {
     public abstract class ConfigurationManager<T> where T : class
     {
-        private const string SettingsFileName = "settings.json";
-        private static readonly string _localSettingsFileName = SettingsFileName.Replace(".json", ".local.json");
+        private readonly string _defaultSettingsFileName;
         private readonly string _pathToSettingsFolder;
-        private readonly List<string> _settingJsonsToAdd;
-
-        public ConfigurationManager(string? pathToSettingsFolder = null, List<string>? additionalSettingFiles = null)
-        {
-            _pathToSettingsFolder = pathToSettingsFolder ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
-            _settingJsonsToAdd = new() { SettingsFileName };
-            additionalSettingFiles?.ForEach(AddJsonAsSource);
-        }
+        private readonly List<string> _settingFileNames = new();
 
         private static readonly object _lockObj = new();
 
-        public abstract T? CurrentConfigurations { get; protected set; }
+        public ConfigurationManager(
+            string defaultSettingsFileName = "settings.json",
+            string? pathToSettingsFolder = null,
+            List<string>? additionalSettingFiles = null)
+        {
+            _defaultSettingsFileName = defaultSettingsFileName;
+            _pathToSettingsFolder = pathToSettingsFolder ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
+            AddJsonAsSource(defaultSettingsFileName);
+
+            additionalSettingFiles?.ForEach(AddJsonAsSource);
+        }
+
+        public abstract T? Current { get; protected set; }
 
         public void LoadEnvSettings()
         {
-            if (CurrentConfigurations == null)
+            lock (_lockObj)
             {
-                lock (_lockObj)
+                if (Current == null)
                 {
                     var envName = GetEnvName();
                     AddEnvironmentConfigs(envName);
-                    CurrentConfigurations = GetConfiguration().Get<Configurations<T>>().EnironmentConfigurations!;
+                    Current = GetConfiguration().Get<Configurations<T>>().EnironmentConfigurations!;
                 }
             }
         }
 
-        protected void AddJsonAsSource(string jsonFileName)
-        {
-            _settingJsonsToAdd.Add(jsonFileName);
-        }
-
         private void AddEnvironmentConfigs(string envName)
         {
-            var envConfigJson = SettingsFileName.Replace(".json", envName);
+            var envConfigJson = _defaultSettingsFileName.Replace(".json", $".{envName}.json");
             AddJsonAsSource(envConfigJson);
+        }
+
+        protected void AddJsonAsSource(string jsonFileName)
+        {
+            _settingFileNames.Add(jsonFileName);
         }
 
         private string GetEnvName()
         {
-                var builder = GetConfiguration();
-                var currentEnv = builder.Get<Configurations>().Environment;
-                return currentEnv!;
+            var builder = GetConfiguration();
+            var currentEnv = builder.Get<Configurations>().Environment;
+            return currentEnv!;
         }
 
         protected IConfiguration GetConfiguration()
@@ -57,10 +61,10 @@ namespace Core.Configuration
             var builder = new ConfigurationBuilder()
                 .SetBasePath(_pathToSettingsFolder);
 
-            _settingJsonsToAdd.ForEach(path => builder.AddJsonFile(path));
+            _settingFileNames.ForEach(path => builder.AddJsonFile(path));
 
             builder.AddEnvironmentVariables()
-            .AddJsonFile(_localSettingsFileName, optional: true);
+            .AddJsonFile(_defaultSettingsFileName.Replace(".json", ".local.json"), optional: true);
 
             return builder.Build();
         }

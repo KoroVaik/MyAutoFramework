@@ -3,7 +3,7 @@ using WebDriverManager.DriverConfigs;
 using WebDriverManager.DriverConfigs.Impl;
 using WebDriverManager.Helpers;
 
-namespace Core.UI.Browser.Settings
+namespace Core.UI.Browser.Settings.WebDriver
 {
     public static class DriverBinaryManager
     {

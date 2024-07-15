@@ -20,7 +20,7 @@ namespace Core.UI.Browser.Pages.Components.Elements
 
         protected By[] SearchPathFragments => _searchPathFragments ?? throw new Exception(ElementNotInitialized);
 
-        public virtual string SearchPath => XPathHelper.ConvertByFragmentsToString(SearchPathFragments);
+        public virtual string SearchPath => ByHelper.ConvertByFragmentsToString(SearchPathFragments);
 
         public string TagName => WebElement.TagName;
 

@@ -18,7 +18,7 @@ namespace Core.UI.Browser.Pages
 
         }
 
-        public virtual bool Isloaded()
+        public virtual bool IsLoaded()
         {
             var documentState = _browser!.ExecuteScript<string>("return document.readyState;");
             return documentState == "complete";

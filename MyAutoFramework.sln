@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.UI", "Core.UI\Core.UI.csproj", "{4139D8A8-B69C-4AF4-8C87-1FC24FD807E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.UI", "Core.UI\Core.UI.csproj", "{4139D8A8-B69C-4AF4-8C87-1FC24FD807E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{CF44AAE2-E94E-4A7F-BCA1-596B7FC850E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{CF44AAE2-E94E-4A7F-BCA1-596B7FC850E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{03FACE31-189E-45F8-91D6-0B4332E3D4A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UiTests", "ClassLibrary1\UiTests.csproj", "{03FACE31-189E-45F8-91D6-0B4332E3D4A1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4139D8A8-B69C-4AF4-8C87-1FC24FD807E5} = {4139D8A8-B69C-4AF4-8C87-1FC24FD807E5}
 	EndProjectSection

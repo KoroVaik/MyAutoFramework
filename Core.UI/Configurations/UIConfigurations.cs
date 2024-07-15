@@ -1,4 +1,6 @@
-﻿namespace Core.UI.Browser.Configurations
+﻿using Core.UI.Browser.Drivers;
+
+namespace Core.UI.Configurations
 {
     public class UIConfigurations
     {

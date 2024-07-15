@@ -1,6 +1,4 @@
-﻿using Core.UI.Browser;
-
-namespace Core.UI.Browser.Configurations
+﻿namespace Core.UI.Browser.Drivers
 {
     public class WebDriverOptions
     {

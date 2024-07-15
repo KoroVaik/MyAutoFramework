@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 		<Version>1.0.0.1</Version>
@@ -10,8 +10,8 @@
 	
 	<ItemGroup>
 		<PackageReference Include="Serilog" Version="3.1.1" />
-		<PackageReference Include="WebDriverManager" Version="2.17.1" />
-		<PackageReference Include="Selenium.WebDriver" Version="4.16.2" />
+		<PackageReference Include="WebDriverManager" Version="2.17.4" />
+		<PackageReference Include="Selenium.WebDriver" Version="4.22.0" />
 	</ItemGroup>
 	
 	<ItemGroup>

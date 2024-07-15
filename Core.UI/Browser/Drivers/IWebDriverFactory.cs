@@ -1,5 +1,4 @@
-﻿using Core.UI.Browser.Configurations;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 
 namespace Core.UI.Browser.Drivers
 {

@@ -1,9 +1,8 @@
-﻿using Core.Configuration.Models;
-using Core.UI.Browser.Configurations;
+﻿using Core.UI.Browser.Drivers;
 using Core.Utils;
 using OpenQA.Selenium.Chrome;
 
-namespace Core.UI.Browser.Settings
+namespace Core.UI.Browser.Settings.WebDriver
 {
     public class ChromeDriverConfigurator : DriverConfigurator
     {
