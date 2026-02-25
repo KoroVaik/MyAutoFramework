@@ -1,0 +1,6 @@
+{
+  "Environment": "QA",
+  "Configs": {
+    "WebDriverType": "LocalChrome"
+  }
+}

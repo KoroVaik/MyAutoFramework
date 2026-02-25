@@ -1,72 +1,54 @@
-﻿using Core.Configuration.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
+using Core.Configuration.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace Core.Configuration
 {
-    public abstract class ConfigurationManager<T> where T : class
+    public class ConfigurationManager
     {
-        private readonly string _defaultSettingsFileName;
-        private readonly string _pathToSettingsFolder;
-        private readonly List<string> _settingFileNames = new();
+        protected const string SettingsFileName = "settings.json";
+        protected const string SettingsFolder = "Settings";
 
-        private static readonly object _lockObj = new();
-
-        public ConfigurationManager(
-            string defaultSettingsFileName = "settings.json",
-            string? pathToSettingsFolder = null,
-            List<string>? additionalSettingFiles = null)
+        public static Environments GetEnvName()
         {
-            _defaultSettingsFileName = defaultSettingsFileName;
-            _pathToSettingsFolder = pathToSettingsFolder ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
-            AddJsonAsSource(defaultSettingsFileName);
+            var builder = new ConfigurationManager().GetConfiguration();
+            var configs = builder.Get<EnvConfigurations>()
+                ?? throw new Exception($"Configuratons must be of type {nameof(EnvConfigurations)} in settings json");
+            Validate(configs);
 
-            additionalSettingFiles?.ForEach(AddJsonAsSource);
+            var currentEnvStr = configs.Environment;
+            var currentEnv = (Environments)Enum.Parse(typeof(Environments), currentEnvStr.ToUpper());
+
+            return currentEnv;
         }
 
-        public abstract T? Current { get; protected set; }
-
-        public void LoadEnvSettings()
+        protected virtual IConfiguration GetConfiguration()
         {
-            lock (_lockObj)
-            {
-                if (Current == null)
-                {
-                    var envName = GetEnvName();
-                    AddEnvironmentConfigs(envName);
-                    Current = GetConfiguration().Get<Configurations<T>>().EnironmentConfigurations!;
-                }
-            }
-        }
-
-        private void AddEnvironmentConfigs(string envName)
-        {
-            var envConfigJson = _defaultSettingsFileName.Replace(".json", $".{envName}.json");
-            AddJsonAsSource(envConfigJson);
-        }
-
-        protected void AddJsonAsSource(string jsonFileName)
-        {
-            _settingFileNames.Add(jsonFileName);
-        }
-
-        private string GetEnvName()
-        {
-            var builder = GetConfiguration();
-            var currentEnv = builder.Get<Configurations>().Environment;
-            return currentEnv!;
-        }
-
-        protected IConfiguration GetConfiguration()
-        {
+            var pathToSettingsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, SettingsFolder);
             var builder = new ConfigurationBuilder()
-                .SetBasePath(_pathToSettingsFolder);
-
-            _settingFileNames.ForEach(path => builder.AddJsonFile(path));
+                .SetBasePath(pathToSettingsFolder);
 
             builder.AddEnvironmentVariables()
-            .AddJsonFile(_defaultSettingsFileName.Replace(".json", ".local.json"), optional: true);
+                .AddJsonFile(SettingsFileName.Replace(".json", ".local.json"), optional: true);
 
             return builder.Build();
+        }
+
+        protected static void Validate<TModel>(TModel dataToValidate) where TModel : class
+        {
+            var ctx = new ValidationContext(dataToValidate);
+            var results = new List<ValidationResult>();
+
+            if (Validator.TryValidateObject(dataToValidate, ctx, results))
+                return;
+
+            var serializedObject = JsonSerializer.Serialize(dataToValidate);
+
+            var errors = string.Join(Environment.NewLine, results.Select(r => r.ErrorMessage));
+            throw new Exception($"Configuration validation failed for <{typeof(TModel).Name}>:" +
+                $"{Environment.NewLine}{errors}" +
+                $"{Environment.NewLine}Configs data: {serializedObject}");
         }
     }
 }

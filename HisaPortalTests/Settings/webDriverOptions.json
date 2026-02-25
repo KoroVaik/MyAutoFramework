@@ -1,0 +1,10 @@
+{
+  "Configs": {
+    "DefaultWebDriversOptions": [
+      {
+        "IsHeadless": false,
+        "WebDriverType": "LocalChrome"
+      }
+    ]
+  }
+}

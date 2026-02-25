@@ -1,0 +1,8 @@
+{
+  "Users": {
+    "User1": {
+      "Username": "johndoe",
+      "Password": "$$<StringGenerator(10)>"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+		<PackageReference Include="Allure.NUnit" Version="2.14.1" />
+    <ProjectReference Include="..\Core.UI\Core.UI.csproj" />
+  </ItemGroup>
+
+</Project>

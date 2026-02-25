@@ -1,0 +1,19 @@
+{
+  "Users": {
+    "UserForLogin": {
+      "##Template": "User1",
+      "Username": "testuser",
+      "Type": "Standard"
+    }
+  },
+  "Horses": {
+    "HorseForLogin": {
+      "##Template": "Horse1",
+      "HorseType": "Fast"
+    },
+    "HorseForSmoke": {
+      "##Template": "Horse5",
+      "HorseType": "Fast"
+    }
+  }
+}

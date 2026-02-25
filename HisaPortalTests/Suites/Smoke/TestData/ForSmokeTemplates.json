@@ -1,0 +1,8 @@
+{
+  "Horses": {
+    "Horse5": {
+      "HorseName": "Smoke",
+      "Type": "$$<WordGenerator()>"
+    }
+  }
+}
