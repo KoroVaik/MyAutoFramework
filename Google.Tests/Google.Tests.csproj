@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HisaPortalUI\HisaPortalUI.csproj" />
+    <ProjectReference Include="..\Google.UI\Google.UI.csproj" />
   </ItemGroup>
 	
 	<ItemGroup>
